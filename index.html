@@ -6,608 +6,114 @@
   <title>AudioRip — Video to Audio Converter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:        #f8f9fc;
-      --surface:   #ffffff;
-      --surface2:  #f1f4f9;
-      --border:    #e2e7f0;
-      --border2:   #c8d3e6;
-      --accent:    #2563eb;
-      --accent-lt: #eff4ff;
-      --accent-md: #dbeafe;
-      --text:      #0f172a;
-      --text2:     #475569;
-      --muted:     #94a3b8;
-      --success:   #16a34a;
-      --success-lt:#f0fdf4;
-      --success-bd:#bbf7d0;
-      --error:     #dc2626;
-      --error-lt:  #fef2f2;
-      --error-bd:  #fecaca;
-      --radius:    12px;
+      --bg: #f8f9fc; --surface: #ffffff; --surface2: #f1f4f9;
+      --border: #e2e7f0; --border2: #c8d3e6;
+      --accent: #2563eb; --accent-lt: #eff4ff; --accent-md: #dbeafe;
+      --text: #0f172a; --text2: #475569; --muted: #94a3b8;
+      --success: #16a34a; --success-lt: #f0fdf4; --success-bd: #bbf7d0;
+      --error: #dc2626; --error-lt: #fef2f2; --error-bd: #fecaca;
+      --radius: 12px;
       --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
       --shadow-md: 0 4px 16px rgba(15,23,42,0.08), 0 2px 6px rgba(15,23,42,0.05);
     }
-
     html, body { height: 100%; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
     main { flex: 1; }
 
-    /* ── Header ── */
-    header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 40px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .logo {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text);
-    }
-
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 40px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
+    .logo { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
     .logo span { color: var(--accent); }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; background: var(--accent-lt); color: var(--accent); border: 1px solid var(--accent-md); padding: 4px 12px; border-radius: 99px; }
+    .badge::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 500;
-      background: var(--accent-lt);
-      color: var(--accent);
-      border: 1px solid var(--accent-md);
-      padding: 4px 12px;
-      border-radius: 99px;
-    }
+    .page { max-width: 680px; margin: 0 auto; padding: 48px 24px 64px; width: 100%; }
+    .hero { text-align: center; margin-bottom: 36px; }
+    .hero-eyebrow { display: inline-block; font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; }
+    .hero h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(30px, 5.5vw, 46px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; color: var(--text); margin-bottom: 16px; }
+    .hero h1 strong { color: var(--accent); }
+    .hero p { color: var(--text2); font-size: 16px; max-width: 440px; margin: 0 auto; line-height: 1.65; }
 
-    .badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-
-    /* ── Page wrapper ── */
-    .page {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 48px 24px 64px;
-      width: 100%;
-    }
-
-    /* ── Hero ── */
-    .hero {
-      text-align: center;
-      margin-bottom: 36px;
-    }
-
-    .hero-eyebrow {
-      display: inline-block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    .hero h1 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(30px, 5.5vw, 46px);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -1.5px;
-      color: var(--text);
-      margin-bottom: 16px;
-    }
-
-    .hero h1 strong {
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .hero p {
-      color: var(--text2);
-      font-size: 16px;
-      max-width: 440px;
-      margin: 0 auto;
-      line-height: 1.65;
-    }
-
-    /* ── Main card ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 20px;
-    }
-
-    /* ── Section label ── */
-    .section-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    /* ── Drop zone ── */
-    #drop-zone {
-      border: 2px dashed var(--border2);
-      border-radius: 10px;
-      padding: 44px 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      position: relative;
-      background: var(--bg);
-    }
-
-    #drop-zone:hover,
-    #drop-zone.drag-over {
-      border-color: var(--accent);
-      background: var(--accent-lt);
-    }
-
-    #drop-zone input {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-    }
-
-    .drop-icon {
-      width: 52px;
-      height: 52px;
-      margin: 0 auto 16px;
-      background: var(--accent-md);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .drop-icon svg { color: var(--accent); }
-
-    #drop-zone h3 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-
-    #drop-zone .sub {
-      font-size: 13px;
-      color: var(--text2);
-    }
-
-    #drop-zone .formats {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .fmt-tag {
-      font-size: 11px;
-      font-weight: 500;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text2);
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-
-    /* ── Divider ── */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 24px 0;
-    }
-
-    /* ── File preview ── */
-    #file-info {
-      display: none;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 14px;
-      background: var(--accent-lt);
-      border: 1px solid var(--accent-md);
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    #file-info.show { display: flex; }
-
-    .file-icon-wrap {
-      width: 36px;
-      height: 36px;
-      background: var(--accent-md);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .file-details { flex: 1; min-width: 0; }
-
-    .file-details .name {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .file-details .size {
-      font-size: 12px;
-      color: var(--text2);
-    }
-
-    .remove-btn {
-      background: none;
-      border: none;
-      color: var(--muted);
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 4px;
-      transition: color 0.15s, background 0.15s;
-      display: flex;
-    }
-
-    .remove-btn:hover {
-      color: var(--error);
-      background: var(--error-lt);
-    }
-
-    /* ── Format selector ── */
-    .format-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .fmt-btn {
-      flex: 1;
-      padding: 10px 8px;
-      border-radius: 8px;
-      border: 1.5px solid var(--border);
-      background: var(--surface);
-      color: var(--text2);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .fmt-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-    .fmt-btn.active {
-      border-color: var(--accent);
-      background: var(--accent-lt);
-      color: var(--accent);
-    }
-
-    /* ── Convert button ── */
-    #convert-btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      letter-spacing: -0.2px;
-      box-shadow: 0 2px 8px rgba(37,99,235,0.25);
-    }
-
-    #convert-btn:hover:not(:disabled) {
-      background: #1d4ed8;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(37,99,235,0.35);
-    }
-
-    #convert-btn:disabled {
-      background: var(--border2);
-      color: var(--muted);
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    /* ── Progress ── */
-    #progress-section {
-      display: none;
-      margin-top: 20px;
-      padding: 16px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-
-    #progress-section.show { display: block; }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text2);
-      margin-bottom: 10px;
-    }
-
-    .progress-bar-track {
-      background: var(--border);
-      border-radius: 99px;
-      height: 6px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), #60a5fa);
-      border-radius: 99px;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    #status-msg {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 8px;
-      min-height: 16px;
-      font-family: monospace;
-    }
-
-    /* ── Download ── */
-    #download-section {
-      display: none;
-      margin-top: 20px;
-      padding: 20px;
-      background: var(--success-lt);
-      border: 1px solid var(--success-bd);
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    #download-section.show { display: block; }
-
-    .dl-check {
-      width: 40px;
-      height: 40px;
-      background: var(--success);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 12px;
-    }
-
-    #download-section p {
-      font-size: 14px;
-      font-weight: 600;
-      color: #15803d;
-      margin-bottom: 14px;
-    }
-
-    #download-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 28px;
-      background: var(--success);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s;
-      box-shadow: 0 2px 8px rgba(22,163,74,0.25);
-    }
-
-    #download-btn:hover { background: #15803d; }
-
-    /* ── How it works ── */
-    .how-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px 32px;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 20px;
-    }
-
-    .how-section h2 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .step {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .step-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--accent-lt);
-      border: 1px solid var(--accent-md);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-
-    .step h3 {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .step p {
-      font-size: 12px;
-      color: var(--text2);
-      line-height: 1.5;
-    }
-
-    /* ── Privacy strip ── */
-    .privacy-strip {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .priv-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--text2);
-      font-weight: 500;
-    }
-
+    .privacy-strip { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .priv-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); font-weight: 500; }
     .priv-item svg { color: var(--accent); }
 
-    /* ── Error ── */
-    #error-msg {
-      display: none;
-      margin-top: 14px;
-      padding: 12px 14px;
-      background: var(--error-lt);
-      border: 1px solid var(--error-bd);
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--error);
-      font-weight: 500;
-    }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-md); margin-bottom: 20px; }
+    .section-label { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px; }
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
 
+    #drop-zone { border: 2px dashed var(--border2); border-radius: 10px; padding: 44px 24px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; background: var(--bg); }
+    #drop-zone:hover, #drop-zone.drag-over { border-color: var(--accent); background: var(--accent-lt); }
+    #drop-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .drop-icon { width: 52px; height: 52px; margin: 0 auto 16px; background: var(--accent-md); border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+    .drop-icon svg { color: var(--accent); }
+    #drop-zone h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    #drop-zone .sub { font-size: 13px; color: var(--text2); }
+    #drop-zone .formats { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+    .fmt-tag { font-size: 11px; font-weight: 500; background: var(--surface); border: 1px solid var(--border); color: var(--text2); padding: 2px 8px; border-radius: 4px; }
+
+    #file-info { display: none; align-items: center; gap: 14px; padding: 12px 14px; background: var(--accent-lt); border: 1px solid var(--accent-md); border-radius: 8px; margin-bottom: 20px; }
+    #file-info.show { display: flex; }
+    .file-icon-wrap { width: 36px; height: 36px; background: var(--accent-md); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .file-details { flex: 1; min-width: 0; }
+    .file-details .name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-details .size { font-size: 12px; color: var(--text2); }
+    .remove-btn { background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.15s, background 0.15s; display: flex; }
+    .remove-btn:hover { color: var(--error); background: var(--error-lt); }
+
+    .format-row { display: flex; gap: 8px; margin-bottom: 20px; }
+    .fmt-btn { flex: 1; padding: 10px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text2); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .fmt-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .fmt-btn.active { border-color: var(--accent); background: var(--accent-lt); color: var(--accent); }
+
+    #convert-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; letter-spacing: -0.2px; box-shadow: 0 2px 8px rgba(37,99,235,0.25); }
+    #convert-btn:hover:not(:disabled) { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,0.35); }
+    #convert-btn:disabled { background: var(--border2); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+
+    #progress-section { display: none; margin-top: 20px; padding: 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; }
+    #progress-section.show { display: block; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 10px; }
+    .progress-bar-track { background: var(--border); border-radius: 99px; height: 6px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #60a5fa); border-radius: 99px; width: 0%; transition: width 0.3s ease; }
+    #status-msg { font-size: 12px; color: var(--muted); margin-top: 8px; min-height: 16px; font-family: monospace; }
+
+    #download-section { display: none; margin-top: 20px; padding: 20px; background: var(--success-lt); border: 1px solid var(--success-bd); border-radius: 10px; text-align: center; }
+    #download-section.show { display: block; }
+    .dl-check { width: 40px; height: 40px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+    #download-section p { font-size: 14px; font-weight: 600; color: #15803d; margin-bottom: 14px; }
+    #download-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 28px; background: var(--success); color: #fff; border: none; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; transition: background 0.2s; box-shadow: 0 2px 8px rgba(22,163,74,0.25); }
+    #download-btn:hover { background: #15803d; }
+
+    .how-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; box-shadow: var(--shadow-sm); margin-bottom: 20px; }
+    .how-section h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .step { display: flex; flex-direction: column; gap: 8px; }
+    .step-icon { width: 36px; height: 36px; background: var(--accent-lt); border: 1px solid var(--accent-md); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--accent); margin-bottom: 4px; }
+    .step h3 { font-size: 13px; font-weight: 600; color: var(--text); }
+    .step p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+    #error-msg { display: none; margin-top: 14px; padding: 12px 14px; background: var(--error-lt); border: 1px solid var(--error-bd); border-radius: 8px; font-size: 13px; color: var(--error); font-weight: 500; }
     #error-msg.show { display: block; }
 
-    /* ── FFmpeg loader ── */
-    #ffmpeg-loader {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 20px;
-      font-size: 13px;
-      color: var(--text2);
-      font-weight: 500;
-    }
-
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid var(--border2);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-
+    #ffmpeg-loader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px; font-size: 13px; color: var(--text2); font-weight: 500; text-align: center; }
+    .spinner { width: 28px; height: 28px; border: 3px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    #loader-text { color: var(--text2); font-size: 13px; }
+    #loader-sub { color: var(--muted); font-size: 12px; }
 
-    /* ── Footer ── */
-    footer {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      padding: 20px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .footer-brand {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .footer-name {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .footer-email {
-      font-size: 12px;
-      color: var(--text2);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-brand { display: flex; flex-direction: column; gap: 2px; }
+    .footer-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+    .footer-email { font-size: 12px; color: var(--text2); text-decoration: none; transition: color 0.15s; }
     .footer-email:hover { color: var(--accent); }
-
-    .footer-copy {
-      font-size: 12px;
-      color: var(--muted);
-    }
+    .footer-copy { font-size: 12px; color: var(--muted); }
 
     @media (max-width: 560px) {
-      header { padding: 0 16px; }
-      .page { padding: 32px 16px 48px; }
-      .card { padding: 20px 16px; }
-      .how-section { padding: 20px 16px; }
+      header { padding: 0 16px; } .page { padding: 32px 16px 48px; }
+      .card { padding: 20px 16px; } .how-section { padding: 20px 16px; }
       .steps { grid-template-columns: 1fr; gap: 16px; }
       footer { padding: 16px; flex-direction: column; align-items: flex-start; }
     }
@@ -622,15 +128,12 @@
 
 <main>
   <div class="page">
-
-    <!-- Hero -->
     <div class="hero">
       <span class="hero-eyebrow">Free · No Account · No Upload</span>
       <h1>Convert any video to<br/><strong>audio instantly</strong></h1>
       <p>Upload your video, select the format, and download the audio. Processed entirely in your browser — your files never leave your device.</p>
     </div>
 
-    <!-- Privacy strip -->
     <div class="privacy-strip">
       <div class="priv-item">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -646,19 +149,14 @@
       </div>
     </div>
 
-    <!-- Main card -->
     <div class="card">
-
-      <!-- FFmpeg Loading -->
       <div id="ffmpeg-loader">
         <div class="spinner"></div>
-        <span>Loading audio engine, please wait…</span>
+        <div id="loader-text">Loading audio engine…</div>
+        <div id="loader-sub">First load may take 10–20 seconds</div>
       </div>
 
-      <!-- Upload area -->
       <div id="upload-area" style="display:none;">
-
-        <!-- File info (when file selected) -->
         <div id="file-info">
           <div class="file-icon-wrap">
             <svg width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24">
@@ -670,15 +168,12 @@
             <div class="size" id="file-size">—</div>
           </div>
           <button class="remove-btn" id="remove-btn" title="Remove file">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M6 18L18 6M6 6l12 12"/>
-            </svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
 
-        <!-- Drop zone -->
         <div id="drop-zone">
-          <input type="file" id="file-input" accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*" />
+          <input type="file" id="file-input" accept="video/*" />
           <div class="drop-icon">
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
               <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -687,17 +182,12 @@
           <h3>Drop your video here</h3>
           <p class="sub">or click to browse files</p>
           <div class="formats">
-            <span class="fmt-tag">MP4</span>
-            <span class="fmt-tag">MOV</span>
-            <span class="fmt-tag">AVI</span>
-            <span class="fmt-tag">MKV</span>
-            <span class="fmt-tag">WEBM</span>
+            <span class="fmt-tag">MP4</span><span class="fmt-tag">MOV</span>
+            <span class="fmt-tag">AVI</span><span class="fmt-tag">MKV</span><span class="fmt-tag">WEBM</span>
           </div>
         </div>
 
         <div class="divider"></div>
-
-        <!-- Format -->
         <div class="section-label">Output Format</div>
         <div class="format-row" id="format-row">
           <button class="fmt-btn active" data-fmt="mp3">MP3 <span style="font-size:10px;font-weight:400;opacity:0.7;">recommended</span></button>
@@ -705,13 +195,9 @@
           <button class="fmt-btn" data-fmt="ogg">OGG</button>
         </div>
 
-        <!-- Convert -->
         <button id="convert-btn" disabled>Extract Audio</button>
-
-        <!-- Error -->
         <div id="error-msg"></div>
 
-        <!-- Progress -->
         <div id="progress-section">
           <div class="progress-label">
             <span id="progress-text">Processing…</span>
@@ -723,12 +209,9 @@
           <div id="status-msg"></div>
         </div>
 
-        <!-- Download -->
         <div id="download-section">
           <div class="dl-check">
-            <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24">
-              <path d="M20 6L9 17l-5-5"/>
-            </svg>
+            <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
           </div>
           <p>Audio extracted successfully</p>
           <a id="download-btn" href="#" download>
@@ -738,48 +221,32 @@
             Download Audio
           </a>
         </div>
-
       </div>
     </div>
 
-    <!-- How it works -->
     <div class="how-section">
       <h2>How it works</h2>
       <div class="steps">
         <div class="step">
-          <div class="step-icon">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-            </svg>
-          </div>
+          <div class="step-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg></div>
           <h3>Upload video</h3>
           <p>Drag & drop or click to select any video file from your device</p>
         </div>
         <div class="step">
-          <div class="step-icon">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-            </svg>
-          </div>
+          <div class="step-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
           <h3>Choose format</h3>
           <p>Select MP3 for music, WAV for high quality, or OGG for web</p>
         </div>
         <div class="step">
-          <div class="step-icon">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-            </svg>
-          </div>
+          <div class="step-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
           <h3>Download audio</h3>
           <p>Conversion is done locally in your browser — then save the file</p>
         </div>
       </div>
     </div>
-
   </div>
 </main>
 
-<!-- Footer -->
 <footer>
   <div class="footer-brand">
     <span class="footer-name">Muhammad Shahid Bashir</span>
@@ -788,9 +255,14 @@
   <span class="footer-copy">No uploads &bull; No tracking &bull; 100% free</span>
 </footer>
 
-<script type="module">
-  import { FFmpeg } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/esm/index.js';
-  import { fetchFile, toBlobURL } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js';
+<!-- Load FFmpeg from unpkg (more reliable on Vercel) -->
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/umd/ffmpeg.js"></script>
+<script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+
+<script>
+(async function() {
+  const { FFmpeg } = FFmpegWASM;
+  const { fetchFile, toBlobURL } = FFmpegUtil;
 
   const ffmpeg = new FFmpeg();
   let selectedFile = null;
@@ -798,6 +270,8 @@
   let outputUrl = null;
 
   const loader       = document.getElementById('ffmpeg-loader');
+  const loaderText   = document.getElementById('loader-text');
+  const loaderSub    = document.getElementById('loader-sub');
   const uploadArea   = document.getElementById('upload-area');
   const dropZone     = document.getElementById('drop-zone');
   const fileInput    = document.getElementById('file-input');
@@ -817,45 +291,59 @@
 
   async function loadFFmpeg() {
     try {
-      const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm';
+      loaderText.textContent = 'Loading audio engine…';
+      loaderSub.textContent = 'First load may take 10–20 seconds';
+
       ffmpeg.on('log', ({ message }) => {
         statusMsg.textContent = message.slice(0, 90);
       });
+
       ffmpeg.on('progress', ({ progress }) => {
         const pct = Math.min(Math.round(progress * 100), 100);
         progressFill.style.width = pct + '%';
         progressPct.textContent = pct + '%';
         if (pct >= 100) progressText.textContent = 'Finalizing…';
       });
-      await ffmpeg.load({
-        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-        wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-      });
+
+      // Try unpkg first, fallback to jsdelivr
+      const tryLoad = async (baseURL) => {
+        await ffmpeg.load({
+          coreURL: await toBlobURL(baseURL + '/ffmpeg-core.js', 'text/javascript'),
+          wasmURL: await toBlobURL(baseURL + '/ffmpeg-core.wasm', 'application/wasm'),
+        });
+      };
+
+      try {
+        await tryLoad('https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd');
+      } catch(e1) {
+        loaderText.textContent = 'Trying alternate source…';
+        try {
+          await tryLoad('https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm');
+        } catch(e2) {
+          await tryLoad('https://unpkg.com/@ffmpeg/core@0.12.4/dist/umd');
+        }
+      }
+
       loader.style.display = 'none';
       uploadArea.style.display = 'block';
+
     } catch (e) {
-      loader.innerHTML = '<span style="color:#dc2626;font-weight:500;">⚠ Failed to load audio engine. Please refresh and try again.</span>';
-      console.error(e);
+      loader.innerHTML = '<div style="color:#dc2626;font-weight:500;padding:8px;">⚠ Audio engine failed to load.<br><span style="font-size:12px;font-weight:400;color:#64748b;margin-top:6px;display:block;">Please try a different browser (Chrome recommended) or check your internet connection.</span></div>';
+      console.error('FFmpeg load error:', e);
     }
   }
 
   dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
   dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
   dropZone.addEventListener('drop', e => {
-    e.preventDefault();
-    dropZone.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
+    e.preventDefault(); dropZone.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
   });
-
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files[0]) handleFile(fileInput.files[0]);
-  });
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
 
   function handleFile(file) {
     if (!file.type.startsWith('video/')) {
-      showError('Please select a valid video file (MP4, MOV, AVI, MKV, WEBM).');
-      return;
+      showError('Please select a valid video file (MP4, MOV, AVI, MKV, WEBM).'); return;
     }
     selectedFile = file;
     fileName.textContent = file.name;
@@ -863,17 +351,14 @@
     fileInfo.classList.add('show');
     dropZone.style.display = 'none';
     convertBtn.disabled = false;
-    hideError();
-    resetOutput();
+    hideError(); resetOutput();
   }
 
   removeBtn.addEventListener('click', () => {
-    selectedFile = null;
-    fileInput.value = '';
+    selectedFile = null; fileInput.value = '';
     fileInfo.classList.remove('show');
     dropZone.style.display = 'block';
-    convertBtn.disabled = true;
-    resetOutput();
+    convertBtn.disabled = true; resetOutput();
   });
 
   document.querySelectorAll('.fmt-btn').forEach(btn => {
@@ -895,7 +380,7 @@
     progressText.textContent = 'Reading file…';
 
     try {
-      const ext = selectedFile.name.split('.').pop() || 'mp4';
+      const ext = (selectedFile.name.split('.').pop() || 'mp4').toLowerCase();
       const inputName = 'input.' + ext;
       const outputName = 'output.' + selectedFormat;
 
@@ -909,8 +394,8 @@
       else if (selectedFormat === 'ogg') args = [...args, '-vn', '-acodec', 'libvorbis', '-q:a', '4', outputName];
 
       await ffmpeg.exec(args);
-
       statusMsg.textContent = 'Preparing download…';
+
       const data = await ffmpeg.readFile(outputName);
       const mimeMap = { mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg' };
       const blob = new Blob([data.buffer], { type: mimeMap[selectedFormat] });
@@ -928,10 +413,9 @@
       statusMsg.textContent = '';
       downloadSec.classList.add('show');
 
-      await ffmpeg.deleteFile(inputName);
-      await ffmpeg.deleteFile(outputName);
+      try { await ffmpeg.deleteFile(inputName); await ffmpeg.deleteFile(outputName); } catch(e) {}
     } catch (err) {
-      showError('Conversion failed. The video may be unsupported or corrupted. Please try a different file.');
+      showError('Conversion failed. Try a different video file or format.');
       console.error(err);
     } finally {
       convertBtn.disabled = false;
@@ -939,29 +423,19 @@
   });
 
   function resetOutput() {
-    progressSec.classList.remove('show');
-    downloadSec.classList.remove('show');
-    progressFill.style.width = '0%';
-    progressPct.textContent = '0%';
-    statusMsg.textContent = '';
+    progressSec.classList.remove('show'); downloadSec.classList.remove('show');
+    progressFill.style.width = '0%'; progressPct.textContent = '0%'; statusMsg.textContent = '';
   }
-
-  function showError(msg) {
-    errorMsg.textContent = msg;
-    errorMsg.classList.add('show');
-  }
-
-  function hideError() {
-    errorMsg.classList.remove('show');
-  }
-
-  function formatBytes(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  function showError(msg) { errorMsg.textContent = msg; errorMsg.classList.add('show'); }
+  function hideError() { errorMsg.classList.remove('show'); }
+  function formatBytes(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+    return (b/1048576).toFixed(1) + ' MB';
   }
 
   loadFFmpeg();
+})();
 </script>
 </body>
 </html>
